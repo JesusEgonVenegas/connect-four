@@ -1,0 +1,67 @@
+@import url('./index.css');
+
+.column {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 24px;
+  margin-left: 19px;
+  cursor: pointer;
+}
+
+.marker {
+  margin-bottom: 10px;
+}
+
+.marker-hide {
+  opacity: 0;
+  transition: opacity 3s ease-in-out;
+}
+
+body {
+  background-color: #7945ff;
+  height: 90vh;
+  display: flex;
+  place-content: center;
+  place-items: center;
+}
+
+.board {
+  display: grid;
+  position: relative;
+}
+
+.boardBlack {
+  position: absolute;
+  pointer-events: none;
+}
+
+.boardWhite {
+  position: absolute;
+  pointer-events: none;
+}
+
+.gameBoard {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin-top: 20px;
+}
+
+.player1 {
+  background-color: var(--yellow);
+  height: 64px;
+  width: 64px;
+}
+
+.player2 {
+  background-color: var(--pink);
+  height: 64px;
+  width: 64px;
+  z-index: 998;
+}
+
+.space {
+  width: 64px;
+  height: 64px;
+}
