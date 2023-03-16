@@ -1,5 +1,9 @@
 @import url('./index.css');
 
+:root {
+  --translate: 33px;
+}
+
 .column {
   display: flex;
   flex-direction: row;
@@ -11,11 +15,6 @@
 
 .marker {
   margin-bottom: 10px;
-}
-
-.marker-hide {
-  opacity: 0;
-  transition: opacity 3s ease-in-out;
 }
 
 body {
@@ -34,11 +33,13 @@ body {
 .boardBlack {
   position: absolute;
   pointer-events: none;
+  z-index: 98;
 }
 
 .boardWhite {
   position: absolute;
   pointer-events: none;
+  z-index: 99;
 }
 
 .gameBoard {
@@ -52,16 +53,32 @@ body {
   background-color: var(--yellow);
   height: 64px;
   width: 64px;
+  border-radius: 50%;
+  animation: drop 0.3s ease-in normal;
+  border: 2px solid black;
 }
 
 .player2 {
   background-color: var(--pink);
   height: 64px;
   width: 64px;
-  z-index: 998;
+  border-radius: 50%;
+  animation: drop 0.3s ease-in normal;
+  border: 2px solid black;
 }
 
 .space {
   width: 64px;
   height: 64px;
+}
+
+@keyframes drop {
+  0% {
+    /* transform: scale(0); */
+    transform: translateY(-1000%);
+  }
+  100% {
+    /* transform: scale(1); */
+    transform: translateY(0%);
+  }
 }

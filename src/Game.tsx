@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './Game.css';
 import boardBL from './assets/images/board-layer-black-large.svg';
 import boardWL from './assets/images/board-layer-white-large.svg';
@@ -23,10 +23,10 @@ const Game = () => {
   const [lastRow, setLastRow] = useState([0, 0, 0, 0, 0, 0, 0]); // keep track of last row that was filled in each column
   const [currentPlayer, setCurrentPlayer] = useState(PLAYER_ONE);
   const [moveCounter, setMoveCounter] = useState(0);
-  const [hoverState, setHoverState] = useState<string | -1>('');
+  const [hoverState, setHoverState] = useState<string | -1>(-1);
   const [currentPlayerMarker, setCurrentPlayerMarker] = useState(markerY);
   const [translate, setTranslate] = useState(33);
-  const [markerStyle, setMarkerStyle] = useState({});
+  const [lastTranslate, setLastTranslate] = useState(translate);
 
   function placeChip(col: number) {
     // function to place a chip in a given column
@@ -131,20 +131,30 @@ const Game = () => {
   const handleHover = (space: any) => {
     const translate = SPACES[space];
     setTranslate(translate);
-    setMarkerStyle({
-      transform: `translateX(${translate}px)`,
-      content: `url(${currentPlayerMarker})`,
-      transition: `all 0.2s ease-in-out`,
-    });
     setHoverState(space);
+    setLastTranslate(translate);
+  };
+
+  useEffect(() => {
+    document.documentElement.style.setProperty(
+      '--translate',
+      `${lastTranslate}px`
+    );
+  }, [lastTranslate]);
+
+  let markerStyle = {
+    // transform: `translateX(${translate}px)`,
+    // transform: `translateX(var(--translate${SPACES.indexOf(lastTranslate)}))`,
+    transform: `translateX(var(--translate))`,
+    // animation: hoverState !== -1 ? 'pulse 1s ease-in-out infinite' : 'none',
+    content: `url(${currentPlayerMarker})`,
+    transition: `all 0.5s ease-in-out`,
+    opacity: hoverState !== -1 ? 1 : 0,
   };
 
   return (
     <>
-      <div
-        className={`marker ${hoverState === -1 ? 'marker-hide' : ''}`}
-        style={markerStyle}
-      ></div>
+      <div className="marker" style={markerStyle}></div>
       <div className="board">
         <div
           className="boardBlack"
