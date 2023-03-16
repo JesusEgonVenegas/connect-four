@@ -1,0 +1,59 @@
+@import url('./index.css');
+
+body {
+  background-color: var(--dark-purple);
+}
+
+.menuContainer {
+  background-color: var(--light-purple);
+  height: 435px;
+  width: 480px;
+  border: 3px black solid;
+  border-radius: 40px;
+  border-width: 3px 3px 10px 3px;
+  /* display: grid; */
+  /* place-content: center; */
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 60px;
+}
+
+.logo {
+  width: 52px;
+  /* margin: auto */
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 12px;
+}
+
+.buttons > button {
+  height: 88px;
+  width: 100%;
+  border: 3px black solid;
+  border-radius: 20px;
+  border-width: 3px 3px 15px 3px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 31px;
+  padding: 1rem;
+  cursor: pointer;
+}
+
+.buttons > button:hover {
+  border-color: var(--dark-purple);
+}
+
+.playVsPlayer {
+  background-color: var(--yellow);
+}
