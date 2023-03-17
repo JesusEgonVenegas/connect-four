@@ -1,0 +1,22 @@
+.menuBarContainer {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 265px;
+  align-items: center;
+  margin-right: 245px;
+}
+.menuBarContainer > button {
+  border-radius: 100px;
+  height: 2.5rem;
+  width: 6rem;
+  text-transform: uppercase;
+  background-color: var(--dark-purple);
+  border: 0;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+.menuBarLogo {
+}
+.menuBarRestart {
+}

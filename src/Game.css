@@ -33,7 +33,7 @@ body {
 .boardBlack {
   position: absolute;
   pointer-events: none;
-  z-index: 98;
+  z-index: 95;
 }
 
 .boardWhite {
@@ -50,26 +50,144 @@ body {
 }
 
 .player1 {
-  background-color: var(--yellow);
-  height: 64px;
-  width: 64px;
+  position: relative;
+  background-color: var(--pink);
+  height: 65px;
+  z-index: 98;
+  width: 65px;
   border-radius: 50%;
   animation: drop 0.3s ease-in normal;
-  border: 2px solid black;
+  border: 2px solid #7f3344;
+  border-top-width: 4px;
 }
 
 .player2 {
-  background-color: var(--pink);
-  height: 64px;
-  width: 64px;
+  position: relative;
+  background-color: var(--yellow);
+  height: 65px;
+  z-index: 97;
+  width: 65px;
   border-radius: 50%;
   animation: drop 0.3s ease-in normal;
-  border: 2px solid black;
+  border: 2px solid #806734;
+  border-top-width: 4px;
 }
 
 .space {
   width: 64px;
   height: 64px;
+}
+
+.pageContainer {
+  display: grid;
+  grid-template-columns: 0.5fr 1fr 0.5fr;
+  place-items: center;
+}
+
+.playerLabel {
+  background-color: white;
+  height: 174px;
+  width: 141px;
+  border: 3px black solid;
+  border-width: 3px 3px 13px 3px;
+  border-radius: 25px;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: space-between; */
+  align-items: center;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 20px;
+  margin-left: 20px;
+}
+
+.playerLabelImg {
+  margin-top: -30px;
+  margin-bottom: 10px;
+}
+
+.playerScore {
+  margin-top: -10px;
+  font-size: 56px;
+}
+
+.footerContainer {
+  position: relative;
+  /* bottom: 0; */
+  z-index: 100;
+  bottom: -15px;
+  left: 217px;
+  width: 200px;
+  height: 180px;
+}
+
+.winnerBoard {
+  position: absolute;
+  border-radius: 20px;
+  left: -42px;
+  background-color: white;
+  height: 175px;
+  width: 285px;
+  border: 3px solid black;
+  border-width: 3px 3px 15px 3px;
+  z-index: 102;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  text-transform: uppercase;
+  font-weight: 700;
+  line-height: 2.5rem;
+}
+
+.winnerPlayer {
+  margin-top: -5px;
+  margin-bottom: -25px;
+}
+
+.winnerMessage {
+  font-size: 56px;
+  margin-bottom: 10px;
+}
+
+.winnerBoard > button {
+  background-color: var(--dark-purple);
+  border-radius: 100px;
+  margin-top: -20px;
+  padding: 0.1rem 1.5rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: white;
+  border: 0;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.boardFooter {
+  position: absolute;
+  inset: 0;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  place-items: center;
+  justify-content: center;
+}
+
+.boardFooterLabel {
+  text-transform: uppercase;
+  color: white;
+  /* z-index: 999; */
+  font-size: 1rem;
+  font-weight: 700;
+  margin-top: 12px;
+}
+
+.boardFooterSeconds {
+  margin-top: -5px;
+  /* z-index: 998; */
+  font-size: 56px;
+  color: white;
+  font-weight: 700;
 }
 
 @keyframes drop {

@@ -5,8 +5,9 @@ import Menu from './Menu';
 function App() {
   return (
     <div className="app">
-      <Menu />
-      {/* <Game /> */}
+      {/* <Menu /> */}
+
+      <Game />
     </div>
   );
 }
