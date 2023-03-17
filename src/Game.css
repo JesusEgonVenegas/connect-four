@@ -4,6 +4,11 @@
   --translate: 33px;
 }
 
+.bigGameContainer {
+  display: grid;
+  place-content: center;
+}
+
 .column {
   display: flex;
   flex-direction: row;

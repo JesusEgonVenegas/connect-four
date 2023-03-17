@@ -1,0 +1,70 @@
+body {
+  background-color: var(--light-purple);
+}
+
+.app {
+  height: 100vh;
+  display: grid;
+}
+
+.rulesContainer {
+  position: relative;
+  background-color: white;
+  display: grid;
+  margin: auto;
+  gap: 1rem;
+  place-content: center;
+  text-transform: uppercase;
+  width: 480px;
+  padding: 2rem;
+  border: 3px solid black;
+  border-bottom-width: 12px;
+  border-radius: 40px;
+}
+
+.rulesContainer > h1 {
+  text-align: center;
+  font-size: 56px;
+}
+
+.rulesContainer > h2 {
+  color: var(--light-purple);
+}
+
+.rulesContainer > p {
+  color: #565656;
+  line-height: 20px;
+  text-transform: none;
+  margin-bottom: 12px;
+}
+
+.rulesContainer > ol > li {
+  text-transform: none;
+  counter-increment: list;
+  position: relative;
+  padding-left: 1rem;
+  color: #565656;
+  line-height: 20px;
+  margin: 12px 0;
+}
+
+.rulesContainer > ol {
+  margin-top: -1.5rem;
+  position: relative;
+  padding: 10px;
+}
+
+ol li::marker {
+  font-weight: 800;
+  content: counter(list);
+  color: black;
+  position: absolute;
+  left: -38px;
+}
+
+.checkMark {
+  position: absolute;
+  place-self: center;
+  bottom: -42px;
+  cursor: pointer;
+}

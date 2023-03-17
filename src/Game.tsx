@@ -9,6 +9,7 @@ import playerTwo from './assets/images/player-two.svg';
 import boardFooterR from './assets/images/turn-background-red.svg';
 import boardFooterY from './assets/images/turn-background-yellow.svg';
 import Menubar from './Menubar';
+import PauseMenu from './PauseMenu';
 
 const ROWS = 6;
 const COLS = 7;
@@ -23,7 +24,11 @@ function createBoard() {
   );
 }
 
-const Game = () => {
+interface Props {
+  handleGoMenu: () => void;
+}
+
+const Game = ({ handleGoMenu }: Props) => {
   const [board, setBoard] = useState(createBoard()); // initialize game board
   const [lastRow, setLastRow] = useState([0, 0, 0, 0, 0, 0, 0]); // keep track of last row that was filled in each column
   const [currentPlayer, setCurrentPlayer] = useState(PLAYER_ONE);
@@ -39,6 +44,7 @@ const Game = () => {
     [PLAYER_ONE]: 0,
     [PLAYER_TWO]: 0,
   });
+  const [showPauseMenu, setShowPauseMenu] = useState(false);
 
   function placeChip(col: number) {
     // function to place a chip in a given column
@@ -186,9 +192,10 @@ const Game = () => {
     setMoveCounter(0);
     setGameWon(false);
     setCurrentPlayerMarker(markerR);
+    setShowPauseMenu(false);
+    setTimer(30);
+    setTimerPaused(false);
   };
-
-  // const handleTimer = () => {
 
   useEffect(() => {
     let elTimer: number;
@@ -218,101 +225,121 @@ const Game = () => {
     }
   }, [timer]);
 
-  // }
+  const handleContinue = () => {
+    setShowPauseMenu(false);
+    setTimerPaused(false);
+  };
+
+  const handleShowPauseMenu = () => {
+    setShowPauseMenu(true);
+    setTimerPaused(true);
+  };
 
   return (
     <>
-      <Menubar restartFunction={handleRestart} />
-      <div className="pageContainer">
-        <div className="playerLabel">
-          <span
-            className="playerLabelImg"
-            style={{ content: `url(${playerOne})` }}
-          ></span>
-          <div>Player 1</div>
-          <div className="playerScore">{winCounter[PLAYER_ONE]}</div>
-        </div>
-        <div className="gameContainer">
-          <div className="marker" style={markerStyle}></div>
-          <div className="board">
-            <div
-              className="boardBlack"
-              style={{
-                content: `url(${boardBL})`,
-              }}
-            ></div>
-            <div
-              className="boardWhite"
-              style={{
-                content: `url(${boardWL})`,
-              }}
-            ></div>
-
-            <div className="gameBoard" onMouseOut={() => setHoverState(-1)}>
-              {board.map((row, colIndex) => (
-                <div className={`column ${colIndex}`}>
-                  {row.map((space, spaceIndex) => (
-                    <div
-                      className={`space ${spaceIndex}`}
-                      onClick={() => handleClick(spaceIndex)}
-                      onMouseOver={() => handleHover(spaceIndex)}
-                    >
-                      {space > 0 && <div className={`player${space}`}></div>}
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-            <div className="footerContainer">
-              {gameWon && (
-                <div className="winnerBoard">
-                  <p className="winnerPlayer">Player {currentPlayer}</p>
-                  <p className="winnerMessage">Wins</p>
-                  <button className="playAgain" onClick={handleRestart}>
-                    Play again
-                  </button>
-                </div>
-              )}
+      <div className="bigGameContainer">
+        {showPauseMenu && (
+          <PauseMenu
+            handleGoMenu={handleGoMenu}
+            handleRestart={handleRestart}
+            handleContinue={handleContinue}
+          />
+        )}
+        <Menubar
+          handleShowPauseMenu={handleShowPauseMenu}
+          restartFunction={handleRestart}
+        />
+        <div className="pageContainer">
+          <div className="playerLabel">
+            <span
+              className="playerLabelImg"
+              style={{ content: `url(${playerOne})` }}
+            ></span>
+            <div>Player 1</div>
+            <div className="playerScore">{winCounter[PLAYER_ONE]}</div>
+          </div>
+          <div className="gameContainer">
+            <div className="marker" style={markerStyle}></div>
+            <div className="board">
               <div
-                className="boardFooter"
+                className="boardBlack"
                 style={{
-                  backgroundImage: `url(${
-                    currentPlayer === PLAYER_ONE ? boardFooterR : boardFooterY
-                  })`,
+                  content: `url(${boardBL})`,
                 }}
-              >
-                <span
-                  className="boardFooterLabel"
+              ></div>
+              <div
+                className="boardWhite"
+                style={{
+                  content: `url(${boardWL})`,
+                }}
+              ></div>
+
+              <div className="gameBoard" onMouseOut={() => setHoverState(-1)}>
+                {board.map((row, colIndex) => (
+                  <div className={`column ${colIndex}`}>
+                    {row.map((space, spaceIndex) => (
+                      <div
+                        className={`space ${spaceIndex}`}
+                        onClick={() => handleClick(spaceIndex)}
+                        onMouseOver={() => handleHover(spaceIndex)}
+                      >
+                        {space > 0 && <div className={`player${space}`}></div>}
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+              <div className="footerContainer">
+                {gameWon && (
+                  <div className="winnerBoard">
+                    <p className="winnerPlayer">Player {currentPlayer}</p>
+                    <p className="winnerMessage">Wins</p>
+                    <button className="playAgain" onClick={handleRestart}>
+                      Play again
+                    </button>
+                  </div>
+                )}
+                <div
+                  className="boardFooter"
                   style={{
-                    color: `${
-                      currentPlayer === PLAYER_ONE ? 'white' : 'black'
-                    }`,
+                    backgroundImage: `url(${
+                      currentPlayer === PLAYER_ONE ? boardFooterR : boardFooterY
+                    })`,
                   }}
                 >
-                  Player {currentPlayer}'s turn
-                </span>
-                <h2
-                  className="boardFooterSeconds"
-                  style={{
-                    color: `${
-                      currentPlayer === PLAYER_ONE ? 'white' : 'black'
-                    }`,
-                  }}
-                >
-                  {timer}s
-                </h2>
+                  <span
+                    className="boardFooterLabel"
+                    style={{
+                      color: `${
+                        currentPlayer === PLAYER_ONE ? 'white' : 'black'
+                      }`,
+                    }}
+                  >
+                    Player {currentPlayer}'s turn
+                  </span>
+                  <h2
+                    className="boardFooterSeconds"
+                    style={{
+                      color: `${
+                        currentPlayer === PLAYER_ONE ? 'white' : 'black'
+                      }`,
+                    }}
+                  >
+                    {timer}s
+                  </h2>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="playerLabel">
-          <div
-            className="playerLabelImg"
-            style={{ content: `url(${playerTwo})` }}
-          ></div>
-          <div>Player 2</div>
-          <div className="playerScore">{winCounter[PLAYER_TWO]}</div>
+          <div className="playerLabel">
+            <div
+              className="playerLabelImg"
+              style={{ content: `url(${playerTwo})` }}
+            ></div>
+            <div>Player 2</div>
+            <div className="playerScore">{winCounter[PLAYER_TWO]}</div>
+          </div>
         </div>
       </div>
     </>
