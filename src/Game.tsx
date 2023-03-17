@@ -4,11 +4,16 @@ import boardBL from './assets/images/board-layer-black-large.svg';
 import boardWL from './assets/images/board-layer-white-large.svg';
 import markerY from './assets/images/marker-yellow.svg';
 import markerR from './assets/images/marker-red.svg';
+import playerOne from './assets/images/player-one.svg';
+import playerTwo from './assets/images/player-two.svg';
+import boardFooterR from './assets/images/turn-background-red.svg';
+import boardFooterY from './assets/images/turn-background-yellow.svg';
+import Menubar from './Menubar';
 
 const ROWS = 6;
 const COLS = 7;
-const PLAYER_ONE = 1;
-const PLAYER_TWO = 2;
+const PLAYER_ONE: number = 1;
+const PLAYER_TWO: number = 2;
 let currentPlayer = PLAYER_ONE;
 const SPACES = [33, 120, 210, 295, 385, 472, 561];
 
@@ -24,9 +29,16 @@ const Game = () => {
   const [currentPlayer, setCurrentPlayer] = useState(PLAYER_ONE);
   const [moveCounter, setMoveCounter] = useState(0);
   const [hoverState, setHoverState] = useState<string | -1>(-1);
-  const [currentPlayerMarker, setCurrentPlayerMarker] = useState(markerY);
+  const [currentPlayerMarker, setCurrentPlayerMarker] = useState(markerR);
   const [translate, setTranslate] = useState(33);
   const [lastTranslate, setLastTranslate] = useState(translate);
+  const [gameWon, setGameWon] = useState(false);
+  const [timer, setTimer] = useState(30);
+  const [timerPaused, setTimerPaused] = useState(false);
+  const [winCounter, setWinCounter] = useState({
+    [PLAYER_ONE]: 0,
+    [PLAYER_TWO]: 0,
+  });
 
   function placeChip(col: number) {
     // function to place a chip in a given column
@@ -95,13 +107,14 @@ const Game = () => {
       // we declare a win and return.
       if (count >= 3) {
         // alert('win');
-        console.log('win');
-        return;
+        // setGameWon(true);
+        return true;
       }
     }
   };
 
   const handleClick = (col: number) => {
+    if (gameWon) return;
     // function to handle user clicks on a column
     const row = placeChip(col); // place a chip in the column
     if (row === -1) return; // if the column is full, do nothing
@@ -119,13 +132,27 @@ const Game = () => {
 
     // checks for win condition
 
-    winCheck(currentPlayer, row, col);
+    if (winCheck(currentPlayer, row, col)) {
+      // Win condition returns a boolean depending on if it was won or not
+      setGameWon(true); // setGameWon state to true
+      setWinCounter({
+        // Updates the winCounter adding one to the winner
+        ...winCounter,
+        [currentPlayer]: winCounter[currentPlayer as keyof {}] + 1,
+      });
+      return;
+    }
 
     // switches players after every move
-    if (currentPlayer === PLAYER_ONE) setCurrentPlayer(PLAYER_TWO);
-    else setCurrentPlayer(PLAYER_ONE);
-    if (currentPlayer === PLAYER_ONE) setCurrentPlayerMarker(markerR);
-    else setCurrentPlayerMarker(markerY);
+    if (!gameWon) {
+      if (currentPlayer === PLAYER_ONE) setCurrentPlayer(PLAYER_TWO);
+      else setCurrentPlayer(PLAYER_ONE);
+      if (currentPlayer === PLAYER_ONE) setCurrentPlayerMarker(markerY);
+      else setCurrentPlayerMarker(markerR);
+    }
+
+    setTimer(30); // After every move the timer gets reset back to 30
+    setTimerPaused(false); // and also it unpauses just in case...
   };
 
   const handleHover = (space: any) => {
@@ -152,36 +179,140 @@ const Game = () => {
     opacity: hoverState !== -1 ? 1 : 0,
   };
 
+  const handleRestart = () => {
+    setBoard(createBoard());
+    setLastRow([0, 0, 0, 0, 0, 0, 0]);
+    setCurrentPlayer(PLAYER_ONE);
+    setMoveCounter(0);
+    setGameWon(false);
+    setCurrentPlayerMarker(markerR);
+  };
+
+  // const handleTimer = () => {
+
+  useEffect(() => {
+    let elTimer: number;
+    if (!timerPaused) {
+      elTimer = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+    }
+
+    return function cleanup() {
+      console.log(`Clearing ${elTimer}`);
+      clearInterval(elTimer);
+    };
+  }, [timerPaused]);
+
+  useEffect(() => {
+    if (timer <= 0 || gameWon) {
+      setTimerPaused(true);
+      setCurrentPlayer((prev) =>
+        prev === PLAYER_ONE ? PLAYER_TWO : PLAYER_ONE
+      );
+      setCurrentPlayerMarker((prev) =>
+        currentPlayer === PLAYER_ONE ? markerY : markerR
+      );
+      setTimer(30);
+      setTimerPaused(false);
+    }
+  }, [timer]);
+
+  // }
+
   return (
     <>
-      <div className="marker" style={markerStyle}></div>
-      <div className="board">
-        <div
-          className="boardBlack"
-          style={{
-            content: `url(${boardBL})`,
-          }}
-        ></div>
-        <div
-          className="boardWhite"
-          style={{
-            content: `url(${boardWL})`,
-          }}
-        ></div>
-        <div className="gameBoard" onMouseOut={() => setHoverState(-1)}>
-          {board.map((row, colIndex) => (
-            <div className={`column ${colIndex}`}>
-              {row.map((space, spaceIndex) => (
-                <div
-                  className={`space ${spaceIndex}`}
-                  onClick={() => handleClick(spaceIndex)}
-                  onMouseOver={() => handleHover(spaceIndex)}
-                >
-                  {space > 0 && <div className={`player${space}`}></div>}
+      <Menubar restartFunction={handleRestart} />
+      <div className="pageContainer">
+        <div className="playerLabel">
+          <span
+            className="playerLabelImg"
+            style={{ content: `url(${playerOne})` }}
+          ></span>
+          <div>Player 1</div>
+          <div className="playerScore">{winCounter[PLAYER_ONE]}</div>
+        </div>
+        <div className="gameContainer">
+          <div className="marker" style={markerStyle}></div>
+          <div className="board">
+            <div
+              className="boardBlack"
+              style={{
+                content: `url(${boardBL})`,
+              }}
+            ></div>
+            <div
+              className="boardWhite"
+              style={{
+                content: `url(${boardWL})`,
+              }}
+            ></div>
+
+            <div className="gameBoard" onMouseOut={() => setHoverState(-1)}>
+              {board.map((row, colIndex) => (
+                <div className={`column ${colIndex}`}>
+                  {row.map((space, spaceIndex) => (
+                    <div
+                      className={`space ${spaceIndex}`}
+                      onClick={() => handleClick(spaceIndex)}
+                      onMouseOver={() => handleHover(spaceIndex)}
+                    >
+                      {space > 0 && <div className={`player${space}`}></div>}
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>
-          ))}
+            <div className="footerContainer">
+              {gameWon && (
+                <div className="winnerBoard">
+                  <p className="winnerPlayer">Player {currentPlayer}</p>
+                  <p className="winnerMessage">Wins</p>
+                  <button className="playAgain" onClick={handleRestart}>
+                    Play again
+                  </button>
+                </div>
+              )}
+              <div
+                className="boardFooter"
+                style={{
+                  backgroundImage: `url(${
+                    currentPlayer === PLAYER_ONE ? boardFooterR : boardFooterY
+                  })`,
+                }}
+              >
+                <span
+                  className="boardFooterLabel"
+                  style={{
+                    color: `${
+                      currentPlayer === PLAYER_ONE ? 'white' : 'black'
+                    }`,
+                  }}
+                >
+                  Player {currentPlayer}'s turn
+                </span>
+                <h2
+                  className="boardFooterSeconds"
+                  style={{
+                    color: `${
+                      currentPlayer === PLAYER_ONE ? 'white' : 'black'
+                    }`,
+                  }}
+                >
+                  {timer}s
+                </h2>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="playerLabel">
+          <div
+            className="playerLabelImg"
+            style={{ content: `url(${playerTwo})` }}
+          ></div>
+          <div>Player 2</div>
+          <div className="playerScore">{winCounter[PLAYER_TWO]}</div>
         </div>
       </div>
     </>
