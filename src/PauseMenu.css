@@ -1,8 +1,8 @@
 .pauseContainer {
   position: absolute;
-  place-self: center;
-  align-self: center;
-  justify-self: center;
+  /* place-self: center; */
+  /* align-self: center; */
+  /* justify-self: center; */
   z-index: 999;
   background-color: var(--light-purple);
   display: flex;
@@ -59,8 +59,9 @@
 
 @media (max-width: 501px) {
   .pauseContainer {
-    /* margin: auto; */
     width: 90vw;
+    inset: 0;
+    margin: auto;
   }
   .pauseContainer button {
     width: 90%;
