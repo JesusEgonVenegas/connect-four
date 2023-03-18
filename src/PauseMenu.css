@@ -59,8 +59,8 @@
 
 @media (max-width: 501px) {
   .pauseContainer {
+    margin: auto;
     width: 90%;
-    /* inset: 0; */
   }
   .pauseContainer button {
     width: 90%;
