@@ -272,7 +272,7 @@ const Game = ({ handleGoMenu }: Props) => {
         <div className="pageContainer">
           <div className="playerLabel">
             <span
-              className="playerLabelImg"
+              className="playerLabelImg leftImage"
               style={{ content: `url(${playerOne})` }}
             ></span>
             <div>Player 1</div>
@@ -358,9 +358,9 @@ const Game = ({ handleGoMenu }: Props) => {
             <div className="footer"> </div>
           </div>
 
-          <div className="playerLabel">
+          <div className="playerLabel rightLabel">
             <div
-              className="playerLabelImg"
+              className="playerLabelImg rightImage"
               style={{ content: `url(${playerTwo})` }}
             ></div>
             <div>Player 2</div>
