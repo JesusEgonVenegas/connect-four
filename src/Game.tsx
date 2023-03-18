@@ -10,6 +10,8 @@ import boardFooterR from './assets/images/turn-background-red.svg';
 import boardFooterY from './assets/images/turn-background-yellow.svg';
 import Menubar from './Menubar';
 import PauseMenu from './PauseMenu';
+import boardBS from './assets/images/board-layer-black-small.svg';
+import boardWS from './assets/images/board-layer-white-small.svg';
 
 const ROWS = 6;
 const COLS = 7;
@@ -17,6 +19,7 @@ const PLAYER_ONE: number = 1;
 const PLAYER_TWO: number = 2;
 let currentPlayer = PLAYER_ONE;
 const SPACES = [33, 120, 210, 295, 385, 472, 561];
+const SPACES_MOBILE = [5, 50, 97, 143, 190, 236, 283];
 
 function createBoard() {
   return Array.from({ length: ROWS }, () =>
@@ -45,6 +48,15 @@ const Game = ({ handleGoMenu }: Props) => {
     [PLAYER_TWO]: 0,
   });
   const [showPauseMenu, setShowPauseMenu] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowWidth(window.innerWidth);
+    }
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  });
 
   function placeChip(col: number) {
     // function to place a chip in a given column
@@ -183,7 +195,7 @@ const Game = ({ handleGoMenu }: Props) => {
   }, [gameWon]);
 
   const handleHover = (space: any) => {
-    const translate = SPACES[space];
+    const translate = windowWidth > 501 ? SPACES[space] : SPACES_MOBILE[space];
     setTranslate(translate);
     setHoverState(space);
     setLastTranslate(translate);
@@ -275,8 +287,10 @@ const Game = ({ handleGoMenu }: Props) => {
               className="playerLabelImg leftImage"
               style={{ content: `url(${playerOne})` }}
             ></span>
-            <div>Player 1</div>
-            <div className="playerScore">{winCounter[PLAYER_ONE]}</div>
+            <div className="playerLabelText">
+              <h2>Player 1</h2>
+              <p className="playerScore">{winCounter[PLAYER_ONE]}</p>
+            </div>
           </div>
           <div className="gameContainer">
             <img
@@ -288,13 +302,13 @@ const Game = ({ handleGoMenu }: Props) => {
               <div
                 className="boardBlack"
                 style={{
-                  content: `url(${boardBL})`,
+                  content: `url(${windowWidth > 501 ? boardBL : boardBS})`,
                 }}
               ></div>
               <div
                 className="boardWhite"
                 style={{
-                  content: `url(${boardWL})`,
+                  content: `url(${windowWidth > 501 ? boardWL : boardWS})`,
                 }}
               ></div>
 
@@ -363,8 +377,11 @@ const Game = ({ handleGoMenu }: Props) => {
               className="playerLabelImg rightImage"
               style={{ content: `url(${playerTwo})` }}
             ></div>
-            <div>Player 2</div>
-            <div className="playerScore">{winCounter[PLAYER_TWO]}</div>
+
+            <div className="playerLabelText right">
+              <h2>Player 2</h2>
+              <p className="playerScore">{winCounter[PLAYER_TWO]}</p>
+            </div>
           </div>
         </div>
       </div>

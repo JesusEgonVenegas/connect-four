@@ -105,11 +105,20 @@ body {
   font-weight: 700;
   font-size: 20px;
   margin-left: 20px;
+  text-align: center;
 }
 
 .playerLabelImg {
   margin-top: -30px;
   margin-bottom: 10px;
+}
+
+.playerLabelText > h2 {
+  font-size: 20px;
+}
+
+.playerLabelText > p {
+  font-size: 56px;
 }
 
 .playerScore {
@@ -228,7 +237,7 @@ body {
   .playerLabel {
     flex-direction: row;
     height: 113px;
-    justify-content: space-around;
+    /* justify-content: space-around; */
     width: 280px;
     margin-bottom: -35px;
     margin-top: 1rem;
@@ -239,12 +248,27 @@ body {
     /* margin-left: -50px; */
   }
 
+  .playerLabelText {
+    gap: 3rem;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    margin-left: 20px;
+  }
+
+  .playerLabelText.right {
+    flex-direction: row-reverse;
+    margin-right: 20px;
+  }
+
   .leftImage {
-    margin-left: -50px;
+    margin-top: 10px;
+    margin-left: -25px;
   }
 
   .rightImage {
-    margin-right: -50px;
+    margin-top: 10px;
+    margin-right: -25px;
   }
 
   .rightLabel {
@@ -257,5 +281,77 @@ body {
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 501px) {
+  .board {
+    justify-items: center;
+  }
+  .gameBoard {
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .column {
+    gap: 5px;
+    width: 325px;
+    margin-left: 0;
+  }
+  .space {
+    height: 38px;
+    width: 40px;
+  }
+
+  .space.\33 {
+    margin-left: 10px;
+  }
+
+  .player1 {
+    height: 48px;
+    width: 48px;
+    border-top-width: 7px;
+  }
+
+  .player2 {
+    height: 43px;
+    width: 43px;
+    border-top-width: 7px;
+  }
+
+  .playerLabel {
+    width: 142px;
+    height: 91px;
+    gap: 5px;
+    justify-content: center;
+  }
+
+  .playerLabelText {
+    flex-direction: column;
+    gap: 0;
+    text-align: center;
+    margin-left: 0;
+  }
+
+  .playerLabelText.right {
+    flex-direction: column;
+    gap: 0;
+    margin-right: 0;
+  }
+
+  .playerLabelText > h2 {
+    font-size: 16px;
+  }
+
+  .playerLabelText > p {
+    font-size: 32px;
+  }
+
+  .leftImage {
+    margin-left: -55px;
+  }
+
+  .rightImage {
+    margin-right: -55px;
+  }
+
+  .footerContainer {
+    left: 4px;
+  }
 }
