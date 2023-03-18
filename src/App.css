@@ -5,3 +5,9 @@
 body {
   background: var(--bodyColor);
 }
+
+@media (max-width: 501px) {
+  body {
+    background-color: var(--light-purple);
+  }
+}

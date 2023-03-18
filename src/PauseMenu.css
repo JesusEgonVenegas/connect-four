@@ -53,3 +53,12 @@
   left: 0;
   opacity: 50%;
 }
+
+@media (max-width: 501px) {
+  .pauseContainer {
+    width: 90%;
+  }
+  .pauseContainer button {
+    width: 90%;
+  }
+}

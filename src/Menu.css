@@ -54,3 +54,16 @@
 .playVsPlayer {
   background-color: var(--yellow);
 }
+
+@media (max-width: 501px) {
+  .menuContainer {
+    border: 0;
+    background-color: transparent;
+    place-content: center;
+    gap: 5rem;
+  }
+  .buttons > button {
+    width: 95%;
+    margin: auto;
+  }
+}

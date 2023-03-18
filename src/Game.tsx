@@ -165,8 +165,8 @@ const Game = ({ handleGoMenu }: Props) => {
     if (!gameWon) {
       if (currentPlayer === PLAYER_ONE) setCurrentPlayer(PLAYER_TWO);
       else setCurrentPlayer(PLAYER_ONE);
-      if (currentPlayer === PLAYER_ONE) setCurrentPlayerMarker(markerY);
-      else setCurrentPlayerMarker(markerR);
+      // if (currentPlayer === PLAYER_ONE) setCurrentPlayerMarker(markerY);
+      // else setCurrentPlayerMarker(markerR);
     }
 
     setTimer(30); // After every move the timer gets reset back to 30
@@ -223,7 +223,7 @@ const Game = ({ handleGoMenu }: Props) => {
     setCurrentPlayer(PLAYER_ONE);
     setMoveCounter(0);
     setGameWon(false);
-    setCurrentPlayerMarker(markerR);
+    // setCurrentPlayerMarker(markerR);
     setShowPauseMenu(false);
     setTimer(30);
     setTimerPaused(false);
@@ -244,13 +244,18 @@ const Game = ({ handleGoMenu }: Props) => {
   }, [timerPaused]);
 
   useEffect(() => {
+    if (!gameWon) {
+      setCurrentPlayerMarker((prev) =>
+        currentPlayer === PLAYER_ONE ? markerR : markerY
+      );
+    }
+  }, [currentPlayer]);
+
+  useEffect(() => {
     if (timer <= 0 || gameWon) {
       setTimerPaused(true);
       setCurrentPlayer((prev) =>
         prev === PLAYER_ONE ? PLAYER_TWO : PLAYER_ONE
-      );
-      setCurrentPlayerMarker((prev) =>
-        currentPlayer === PLAYER_ONE ? markerY : markerR
       );
       setTimer(30);
       setTimerPaused(false);

@@ -64,3 +64,9 @@ ol li::marker {
   bottom: -42px;
   cursor: pointer;
 }
+
+@media (max-width: 501px) {
+  .rulesContainer {
+    width: 90%;
+  }
+}
