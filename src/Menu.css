@@ -1,9 +1,5 @@
 @import url('./index.css');
 
-body {
-  background-color: var(--dark-purple);
-}
-
 .menuContainer {
   background-color: var(--light-purple);
   height: 435px;

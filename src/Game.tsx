@@ -161,6 +161,27 @@ const Game = ({ handleGoMenu }: Props) => {
     setTimerPaused(false); // and also it unpauses just in case...
   };
 
+  useEffect(() => {
+    if (gameWon) {
+      if (currentPlayer === PLAYER_ONE) {
+        document.documentElement.style.setProperty(
+          '--footerColor',
+          'var(--pink)'
+        );
+      } else {
+        document.documentElement.style.setProperty(
+          '--footerColor',
+          'var(--yellow)'
+        );
+      }
+    } else {
+      document.documentElement.style.setProperty(
+        '--footerColor',
+        'var(--dark-purple)'
+      );
+    }
+  }, [gameWon]);
+
   const handleHover = (space: any) => {
     const translate = SPACES[space];
     setTranslate(translate);
@@ -168,19 +189,18 @@ const Game = ({ handleGoMenu }: Props) => {
     setLastTranslate(translate);
   };
 
-  useEffect(() => {
-    document.documentElement.style.setProperty(
-      '--translate',
-      `${lastTranslate}px`
-    );
-  }, [lastTranslate]);
+  // useEffect(() => {
+  //   document.documentElement.style.setProperty(
+  //     '--translate',
+  //     `${lastTranslate}px`
+  //   );
+  // }, [lastTranslate]);
 
-  let markerStyle = {
-    // transform: `translateX(${translate}px)`,
+  var markerStyle = {
+    transform: `translateX(${translate}px)`,
     // transform: `translateX(var(--translate${SPACES.indexOf(lastTranslate)}))`,
-    transform: `translateX(var(--translate))`,
+    // transform: `translateX(var(--translate))`,
     // animation: hoverState !== -1 ? 'pulse 1s ease-in-out infinite' : 'none',
-    content: `url(${currentPlayerMarker})`,
     transition: `all 0.5s ease-in-out`,
     opacity: hoverState !== -1 ? 1 : 0,
   };
@@ -259,7 +279,11 @@ const Game = ({ handleGoMenu }: Props) => {
             <div className="playerScore">{winCounter[PLAYER_ONE]}</div>
           </div>
           <div className="gameContainer">
-            <div className="marker" style={markerStyle}></div>
+            <img
+              className="marker"
+              src={currentPlayerMarker}
+              style={markerStyle}
+            ></img>
             <div className="board">
               <div
                 className="boardBlack"
@@ -330,6 +354,8 @@ const Game = ({ handleGoMenu }: Props) => {
                 </div>
               </div>
             </div>
+
+            <div className="footer"> </div>
           </div>
 
           <div className="playerLabel">

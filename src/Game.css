@@ -2,6 +2,7 @@
 
 :root {
   --translate: 33px;
+  --footerColor: var(--dark-purple);
 }
 
 .bigGameContainer {
@@ -20,10 +21,10 @@
 
 .marker {
   margin-bottom: 10px;
+  margin-top: 10px;
 }
 
 body {
-  background-color: #7945ff;
   height: 90vh;
   display: flex;
   place-content: center;
@@ -204,4 +205,15 @@ body {
     /* transform: scale(1); */
     transform: translateY(0%);
   }
+}
+
+.footer {
+  position: absolute;
+  background-color: var(--footerColor);
+  width: 100vw;
+  border-radius: 50px 50px 0 0;
+  bottom: 0;
+  height: 22%;
+  left: 0;
+  z-index: -1;
 }

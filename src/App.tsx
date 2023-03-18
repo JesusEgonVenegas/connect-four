@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import Game from './Game';
 import Menu from './Menu';
@@ -8,6 +8,20 @@ function App() {
   const [showGame, setShowGame] = useState(false);
   const [showRules, setShowRules] = useState(false);
   const [showMenu, setShowMenu] = useState(true);
+
+  useEffect(() => {
+    if (showMenu) {
+      document.documentElement.style.setProperty(
+        '--bodyColor',
+        'rgb(92, 45, 213)'
+      );
+    } else {
+      document.documentElement.style.setProperty(
+        '--bodyColor',
+        'rgb(121, 69, 255)'
+      );
+    }
+  }, [showMenu]);
 
   const handleRulesButton = () => {
     setShowRules(true);
