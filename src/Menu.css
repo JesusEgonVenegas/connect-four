@@ -57,13 +57,14 @@
 
 @media (max-width: 501px) {
   .menuContainer {
+    width: 100%;
     border: 0;
     background-color: transparent;
     place-content: center;
     gap: 5rem;
+    padding: 0;
   }
-  .buttons > button {
-    width: 95%;
-    margin: auto;
+  .buttons {
+    width: 90vw;
   }
 }
