@@ -24,5 +24,6 @@
 @media (max-width: 501px) {
   .menuBarContainer {
     width: 325px;
+    padding-left: 0;
   }
 }

@@ -316,6 +316,8 @@ body {
   }
 
   .playerLabel {
+    margin-left: auto;
+    margin-right: auto;
     width: 142px;
     height: 91px;
     gap: 5px;
