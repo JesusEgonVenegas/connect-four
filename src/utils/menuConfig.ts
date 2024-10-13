@@ -1,5 +1,14 @@
 import pvpImage from "@assets/images/player-vs-player.svg";
-export const MENU_BUTTONS = [
+
+interface MenuButtonConfig {
+  label: string;
+  imageSrc: string;
+  onClickHandler: string;
+  className?: string;
+  altText?: string;
+}
+
+export const MENU_BUTTONS: MenuButtonConfig[] = [
   {
     label: "Play vs player",
     imageSrc: pvpImage,
