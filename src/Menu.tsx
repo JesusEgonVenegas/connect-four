@@ -1,7 +1,8 @@
 import "./Menu.css";
 import playVsPlayer from "./assets/images/player-vs-player.svg";
-import Logo from "./assets/images/logo.svg";
 import MenuButton from "./components/MenuButton";
+import Logo from "./components/Logo";
+import ButtonGroup from "./components/ButtonGroup";
 
 interface Props {
   handleRulesButton: () => void;
@@ -11,8 +12,8 @@ interface Props {
 const Menu = ({ handleRulesButton, handleShowGame }: Props) => {
   return (
     <div className="menuContainer">
-      <img className="logo" src={Logo} alt="Game Logo" />
-      <div className="buttons">
+      <Logo />
+      <ButtonGroup className="buttons">
         <MenuButton
           label="Play vs player"
           imageSrc={playVsPlayer}
@@ -26,7 +27,7 @@ const Menu = ({ handleRulesButton, handleShowGame }: Props) => {
           onClick={handleRulesButton}
           className="gameRules"
         />
-      </div>
+      </ButtonGroup>
     </div>
   );
 };
