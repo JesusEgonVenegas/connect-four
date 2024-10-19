@@ -1,4 +1,4 @@
-@import url('./index.css');
+@import url("./index.css");
 
 :root {
   --translate: 33px;
@@ -218,13 +218,25 @@ body {
 
 .footer {
   position: fixed;
-  background-color: var(--footerColor);
+  background-color: var(--dark-purple);
   width: 100vw;
   border-radius: 50px 50px 0 0;
   bottom: 0;
   height: 22vh;
   left: 0;
   z-index: -1;
+}
+
+.footer-player-one {
+  background-color: var(--pink);
+}
+
+.footer-player-two {
+  background-color: var(--yellow);
+}
+
+.footer-default {
+  background-color: var(--dark-purple);
 }
 
 @media (max-width: 1024px) {
