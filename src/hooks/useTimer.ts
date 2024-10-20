@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 
 export const useTimer = () => {
-  const [timer, setTimer] = useState(0);
+  const [timer, setTimer] = useState(30);
   const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
     if (!isPaused) {
       interval = setInterval(() => {
-        setTimer((prev) => prev + 1);
+        setTimer((prev) => prev - 1);
       }, 1000);
     }
     return () => {
@@ -20,14 +20,19 @@ export const useTimer = () => {
     setIsPaused(true);
   };
 
+  const resumeTimer = () => {
+    setIsPaused(false);
+  };
+
   const resetTimer = () => {
-    setTimer(0);
+    setTimer(30);
     setIsPaused(false);
   };
 
   return {
     timer,
     isPaused,
+    resumeTimer,
     resetTimer,
     pauseTimer,
   };
