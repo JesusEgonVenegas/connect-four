@@ -1,33 +1,49 @@
+import boardBL from "@assets/images/board-layer-black-large.svg";
+import boardWL from "@assets/images/board-layer-white-large.svg";
+import boardBS from "@assets/images/board-layer-black-small.svg";
+import boardWS from "@assets/images/board-layer-white-small.svg";
 interface BoardProps {
   board: number[][];
-  currentPlayer: number;
-  timer: number;
-  onPlaceChip: (colIndex: number) => void;
-  onMouseOver: (colIndex: number) => void;
-  gameWon: boolean;
+  handleClick: (spaceIndex: number) => void;
+  handleMouseOut: () => void;
+  handleMouseOver: (spaceIndex: number) => void;
+  windowWidth: number;
 }
 
 const Board: React.FC<BoardProps> = ({
   board,
-  currentPlayer,
-  timer,
-  onPlaceChip,
-  onMouseOver,
-  gameWon,
+  handleClick,
+  handleMouseOut,
+  handleMouseOver,
+  windowWidth,
 }) => {
   return (
     <div className="board">
-      <h2>Current Player</h2>
-      <h2>Time: {timer}s</h2>
-      {gameWon && <h2>Game Over! Player {currentPlayer} wins!</h2>}
-      <div className="board-grid">
-        {board.map((row, rowIndex) => (
-          <div key={rowIndex} className="row">
-            {row.map((cell, colIndex) => (
+      <div
+        className="boardBlack"
+        style={{
+          content: `url(${windowWidth > 501 ? boardBL : boardBS})`,
+        }}
+      ></div>
+      <div
+        className="boardWhite"
+        style={{
+          content: `url(${windowWidth > 501 ? boardWL : boardWS})`,
+        }}
+      ></div>
+      <div className="gameBoard">
+        {board.map((row, colIndex) => (
+          <div className={`column ${colIndex}`} key={colIndex}>
+            {row.map((space, spaceIndex) => (
               <div
-                key={colIndex}
-                className={`cell ${cell === 1 ? "player1" : cell === 2 ? "player2" : ""}`}
-              />
+                key={spaceIndex}
+                className={`space ${spaceIndex}`}
+                onClick={() => handleClick(spaceIndex)}
+                onMouseLeave={() => handleMouseOut()}
+                onMouseOver={() => handleMouseOver(spaceIndex)}
+              >
+                {space > 0 && <div className={`player${space}`}></div>}
+              </div>
             ))}
           </div>
         ))}
