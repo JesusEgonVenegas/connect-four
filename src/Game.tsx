@@ -32,12 +32,16 @@ interface Props {
 
 const Game = ({ handleGoMenu }: Props) => {
   const [board, setBoard] = useState(createBoard()); // initialize game board
-  const [currentPlayer, setCurrentPlayer] = useState(PLAYER_ONE);
-  const [moveCounter, setMoveCounter] = useState(0);
+
+  const [gameState, setGameState] = useState({
+    currentPlayer: PLAYER_ONE,
+    moveCounter: 0,
+    gameWon: false,
+    timer: 30,
+    timerPaused: false,
+  });
+
   const [hoverState, setHoverState] = useState<number>(null);
-  const [gameWon, setGameWon] = useState(false);
-  const [timer, setTimer] = useState(30);
-  const [timerPaused, setTimerPaused] = useState(false);
   const [winCounter, setWinCounter] = useState({
     [PLAYER_ONE]: 0,
     [PLAYER_TWO]: 0,
@@ -92,7 +96,7 @@ const Game = ({ handleGoMenu }: Props) => {
     const directions = [
       [0, 1], // horizontal
       [1, 0], // vertical
-      [1, 1], // diagonal /
+      [1, 1], // diagon1al /
       [-1, 1], // diagonal \
     ];
     return directions.some(
@@ -102,41 +106,56 @@ const Game = ({ handleGoMenu }: Props) => {
   };
 
   const handleClick = (col: number) => {
-    if (gameWon) return;
+    if (gameState.gameWon) return;
+
     const row = placeChip(col);
     if (row === -1) return;
 
-    setBoard((prev) => {
-      const newBoard = [...prev];
-      newBoard[row][col] = currentPlayer;
-      return newBoard;
-    });
+    const currentPlayer = gameState.currentPlayer;
 
-    setMoveCounter((prev) => prev + 1);
+    const gameWon = winCheck(currentPlayer, row, col);
+    const newBoard = updateBoard(row, col, currentPlayer);
 
-    if (moveCounter >= 6 && winCheck(currentPlayer, row, col)) {
-      setGameWon(true); // setGameWon state to true
-      setWinCounter((prev) => ({
-        ...prev,
-        [currentPlayer]: prev[currentPlayer] + 1,
+    setBoard(newBoard);
+
+    if (gameWon) {
+      onWin(currentPlayer, gameWon);
+    } else {
+      setGameState((prevState) => ({
+        ...prevState,
+        currentPlayer: currentPlayer === PLAYER_ONE ? PLAYER_TWO : PLAYER_ONE,
+        moveCounter: prevState.moveCounter + 1,
+        timer: 30,
       }));
-      return;
     }
-
-    setCurrentPlayer((prev) => (prev === PLAYER_ONE ? PLAYER_TWO : PLAYER_ONE));
-    setTimer(30); // After every move the timer gets reset back to 30
-    setTimerPaused(false); // and also it unpauses just in case...
   };
 
-  const footerClass = gameWon
-    ? currentPlayer === PLAYER_ONE
+  const onWin = (currentPlayer: number, gameWon: boolean) => {
+    setWinCounter((prevCounter) => ({
+      ...prevCounter,
+      [currentPlayer]: prevCounter[currentPlayer] + 1,
+    }));
+
+    setGameState((prevState) => ({
+      ...prevState,
+      gameWon: gameWon,
+      timerPaused: gameWon,
+    }));
+  };
+
+  const updateBoard = (row: number, col: number, player: number) => {
+    return board.map((r, rIndex) =>
+      rIndex === row ? r.map((c, cIndex) => (cIndex === col ? player : c)) : r,
+    );
+  };
+
+  const footerClass = gameState.gameWon
+    ? gameState.currentPlayer === PLAYER_ONE
       ? "footer-player-one"
       : "footer-player-two"
     : "footer-default";
 
   const handleHover = (colIndex: number) => {
-    const translate =
-      windowWidth > 501 ? SPACES[colIndex] : SPACES_MOBILE[colIndex];
     setHoverState(colIndex);
   };
 
@@ -148,39 +167,62 @@ const Game = ({ handleGoMenu }: Props) => {
 
   const handleRestart = () => {
     setBoard(createBoard());
-    setCurrentPlayer(PLAYER_ONE);
-    setMoveCounter(0);
-    setGameWon(false);
+
+    setGameState({
+      currentPlayer: PLAYER_ONE,
+      moveCounter: 0,
+      gameWon: false,
+      timer: 30,
+      timerPaused: false,
+    });
+
     setShowPauseMenu(false);
-    setTimer(30);
-    setTimerPaused(false);
   };
 
   useEffect(() => {
-    if (!timerPaused && !gameWon) {
-      const elTimer = setInterval(() => setTimer((prev) => prev - 1), 1000);
+    if (!gameState.timerPaused && !gameState.gameWon) {
+      const elTimer = setInterval(() => {
+        setGameState((prevState) => ({
+          ...prevState,
+          timer: prevState.timer - 1,
+        }));
+      }, 1000);
 
-      if (timer <= 0) {
-        setTimerPaused(true);
-        setCurrentPlayer((prev) =>
-          prev === PLAYER_ONE ? PLAYER_TWO : PLAYER_ONE,
-        );
-        setTimer(30);
-        setTimerPaused(false);
+      if (gameState.timer <= 0) {
+        setGameState((prevState) => ({
+          ...prevState,
+          timerPaused: true,
+        }));
+
+        setTimeout(() => {
+          setGameState((prevState) => ({
+            ...prevState,
+            currentPlayer:
+              prevState.currentPlayer === PLAYER_ONE ? PLAYER_TWO : PLAYER_ONE,
+            timer: 30,
+            timerPaused: false,
+          }));
+        }, 0);
       }
 
       return () => clearInterval(elTimer);
     }
-  }, [timerPaused, gameWon, timer]);
+  }, [gameState.timerPaused, gameState.gameWon, gameState.timer]);
 
   const handleContinue = () => {
     setShowPauseMenu(false);
-    setTimerPaused(false);
+    setGameState((prevState) => ({
+      ...prevState,
+      timerPaused: false,
+    }));
   };
 
   const handleShowPauseMenu = () => {
     setShowPauseMenu(true);
-    setTimerPaused(true);
+    setGameState((prevState) => ({
+      ...prevState,
+      timerPaused: true,
+    }));
   };
 
   return (
@@ -211,7 +253,7 @@ const Game = ({ handleGoMenu }: Props) => {
           <div className="gameContainer">
             <img
               className="marker"
-              src={currentPlayer === PLAYER_ONE ? markerR : markerY}
+              src={gameState.currentPlayer === PLAYER_ONE ? markerR : markerY}
               style={markerStyle}
             ></img>
             <div className="board">
@@ -244,9 +286,11 @@ const Game = ({ handleGoMenu }: Props) => {
                 ))}
               </div>
               <div className={`footerContainer `}>
-                {gameWon && (
+                {gameState.gameWon && (
                   <div className="winnerBoard">
-                    <p className="winnerPlayer">Player {currentPlayer}</p>
+                    <p className="winnerPlayer">
+                      Player {gameState.currentPlayer}
+                    </p>
                     <p className="winnerMessage">Wins</p>
                     <button className="playAgain" onClick={handleRestart}>
                       Play again
@@ -257,7 +301,9 @@ const Game = ({ handleGoMenu }: Props) => {
                   className="boardFooter"
                   style={{
                     backgroundImage: `url(${
-                      currentPlayer === PLAYER_ONE ? boardFooterR : boardFooterY
+                      gameState.currentPlayer === PLAYER_ONE
+                        ? boardFooterR
+                        : boardFooterY
                     })`,
                   }}
                 >
@@ -265,21 +311,25 @@ const Game = ({ handleGoMenu }: Props) => {
                     className="boardFooterLabel"
                     style={{
                       color: `${
-                        currentPlayer === PLAYER_ONE ? "white" : "black"
+                        gameState.currentPlayer === PLAYER_ONE
+                          ? "white"
+                          : "black"
                       }`,
                     }}
                   >
-                    Player {currentPlayer}'s turn
+                    Player {gameState.currentPlayer}'s turn
                   </span>
                   <h2
                     className="boardFooterSeconds"
                     style={{
                       color: `${
-                        currentPlayer === PLAYER_ONE ? "white" : "black"
+                        gameState.currentPlayer === PLAYER_ONE
+                          ? "white"
+                          : "black"
                       }`,
                     }}
                   >
-                    {timer}s
+                    {gameState.timer}s
                   </h2>
                 </div>
               </div>
