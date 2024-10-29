@@ -161,7 +161,15 @@ const Game = ({ handleGoMenu, vsAi }: Props) => {
     setShowPauseMenu(false);
   };
 
+  const isFirstTurn = () => {
+    return board[ROWS - 1].every((ele) => ele === 0);
+  };
+
   useEffect(() => {
+    console.log(isFirstTurn());
+    if (isFirstTurn()) {
+      pauseTimer();
+    }
     if (timer <= 0 && !gameState.gameWon) {
       pauseTimer();
       switchPlayer();
