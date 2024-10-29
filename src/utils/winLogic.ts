@@ -1,3 +1,5 @@
+import { COLS, ROWS } from "@/constants/gameConstants";
+
 export const checkWin = (
   board: number[][],
   row: number,
@@ -30,6 +32,65 @@ export const checkWin = (
         if (count === 4) return true;
         r += sign * dr;
         c += sign * dc;
+      }
+    }
+  }
+  return false;
+};
+
+export const checkWinN = (board: number[][], piece: number) => {
+  // Check horizontal locations
+  for (let c = 0; c < COLS - 3; c++) {
+    for (let r = 0; r < ROWS; r++) {
+      if (
+        board[r][c] === piece &&
+        board[r][c + 1] === piece &&
+        board[r][c + 2] === piece &&
+        board[r][c + 3] === piece
+      ) {
+        return true;
+      }
+    }
+  }
+
+  // Check vertical locations
+  for (let c = 0; c < COLS; c++) {
+    for (let r = 0; r < ROWS - 3; r++) {
+      if (
+        board[r][c] === piece &&
+        board[r + 1][c] === piece &&
+        board[r + 2][c] === piece &&
+        board[r + 3][c] === piece
+      ) {
+        return true;
+      }
+    }
+  }
+
+  // Check positively sloped diagonals
+  for (let c = 0; c < COLS - 3; c++) {
+    for (let r = 0; r < ROWS - 3; r++) {
+      if (
+        board[r][c] === piece &&
+        board[r + 1][c + 1] === piece &&
+        board[r + 2][c + 2] === piece &&
+        board[r + 3][c + 3] === piece
+      ) {
+        return true;
+      }
+    }
+  }
+
+  // Check positively sloped diagonals
+  for (let c = 0; c < COLS - 3; c++) {
+    for (let r = 3; r < ROWS - 3; r++) {
+      if (
+        board[r][c] === piece &&
+        board[r - 1][c + 1] === piece &&
+        board[r - 2][c + 2] === piece &&
+        board[r - 3][c + 3] === piece
+      ) {
+        return true;
       }
     }
   }

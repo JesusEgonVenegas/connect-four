@@ -16,7 +16,9 @@ const PlayerLabel = ({ player, score }: props) => {
           content: `url(${player === PLAYER_ONE ? playerOne : playerTwo})`,
         }}
       ></span>
-      <div className={`playerLabelText ${player === PLAYER_TWO ? "righ" : ""}`}>
+      <div
+        className={`playerLabelText ${player === PLAYER_TWO ? "right" : ""}`}
+      >
         <h2>{player === PLAYER_ONE ? "Player 1" : "Player 2"}</h2>
         <p className="playerScore">{score}</p>
       </div>

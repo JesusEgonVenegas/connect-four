@@ -15,6 +15,8 @@ import {
 } from "./constants/gameConstants";
 import PlayerMarker from "./components/PlayerMarker";
 import BoardFooter from "./components/BoardFooter";
+import { minimax } from "./utils/aiLogic";
+import { getAvailableRow } from "./utils/getAvailableRow";
 
 function createBoard() {
   return Array.from({ length: ROWS }, () =>
@@ -24,9 +26,10 @@ function createBoard() {
 
 interface Props {
   handleGoMenu: () => void;
+  vsAi: boolean;
 }
 
-const Game = ({ handleGoMenu }: Props) => {
+const Game = ({ handleGoMenu, vsAi }: Props) => {
   const [board, setBoard] = useState(createBoard()); // initialize game board
 
   const [gameState, setGameState] = useState({
@@ -54,19 +57,10 @@ const Game = ({ handleGoMenu }: Props) => {
     return () => window.removeEventListener("resize", handleResize);
   });
 
-  function getAvailableRow(col: number) {
-    for (let i = 0; i < ROWS; i++) {
-      if (board[ROWS - 1 - i][col] === 0) {
-        return ROWS - 1 - i; // return the row index
-      }
-    }
-    return -1; // if the column is full, return -1
-  }
-
   const handleClick = (col: number) => {
     if (gameState.gameWon) return;
 
-    const row = getAvailableRow(col);
+    const row = getAvailableRow(board, col);
     if (row === -1) return;
 
     handleMove(row, col);
@@ -85,6 +79,12 @@ const Game = ({ handleGoMenu }: Props) => {
       switchPlayer();
     }
   };
+
+  useEffect(() => {
+    if (vsAi && gameState.currentPlayer === PLAYER_TWO) {
+      aiMove();
+    }
+  }, [vsAi, gameState.currentPlayer]);
 
   const switchPlayer = () => {
     setGameState((prevState) => ({
@@ -109,8 +109,12 @@ const Game = ({ handleGoMenu }: Props) => {
   };
 
   const updateBoard = (row: number, col: number, player: number) => {
-    return board.map((r, rIndex) =>
-      rIndex === row ? r.map((c, cIndex) => (cIndex === col ? player : c)) : r,
+    return board.map((r: number[], rIndex: number): number[] =>
+      rIndex === row
+        ? r.map((c: number, cIndex: number): number =>
+            cIndex === col ? player : c,
+          )
+        : r,
     );
   };
 
@@ -130,6 +134,17 @@ const Game = ({ handleGoMenu }: Props) => {
   const handleMouseOut = () => {
     if (markerRef.current) {
       markerRef.current.style.opacity = "0";
+    }
+  };
+
+  const aiMove = () => {
+    const { column } = minimax(board, 4, -Infinity, Infinity, true);
+    console.log("this", column);
+    if (column !== -1) {
+      const row = getAvailableRow(board, column);
+      if (row !== -1) {
+        handleMove(row, column);
+      }
     }
   };
 

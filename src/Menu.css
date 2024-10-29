@@ -1,4 +1,4 @@
-@import url('./index.css');
+@import url("./index.css");
 
 .menuContainer {
   background-color: var(--light-purple);
@@ -15,7 +15,8 @@
   justify-content: space-between;
   place-self: center;
   align-items: center;
-  padding-top: 60px;
+  /* padding-top: 60px; */
+  gap: 1rem;
 }
 
 .logo {

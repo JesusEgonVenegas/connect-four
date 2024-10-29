@@ -7,6 +7,7 @@ import ButtonGroup from "@/components/ButtonGroup";
 interface Props {
   handleRulesButton: () => void;
   handleShowGame: () => void;
+  handlePvaButton: () => void;
 }
 
 const Menu = (props: Props) => {

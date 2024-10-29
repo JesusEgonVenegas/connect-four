@@ -17,6 +17,13 @@ export const MENU_BUTTONS: MenuButtonConfig[] = [
     altText: "Play vs Player icon",
   },
   {
+    label: "Play vs AI",
+    imageSrc: "",
+    onClickHandler: "handlePvaButton",
+    className: "playVsPlayer",
+    altText: "Play vs AI icon",
+  },
+  {
     label: "Game rules",
     imageSrc: "",
     onClickHandler: "handleRulesButton",
