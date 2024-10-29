@@ -138,7 +138,7 @@ const Game = ({ handleGoMenu, vsAi }: Props) => {
   };
 
   const aiMove = () => {
-    const { column } = minimax(board, 4, -Infinity, Infinity, true);
+    const { column } = minimax(board, 5, -Infinity, Infinity, true);
     console.log("this", column);
     if (column !== -1) {
       const row = getAvailableRow(board, column);
